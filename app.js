@@ -108,7 +108,7 @@ function parseCode(pseudoCodeString) {
 function buildCodeForCSharpServer(pseudoCode) {
     var supportEntityFramework = true;
     var codeClass = pseudoCode.codeClass;
-    var builtinTypes = ["int", "long", "short", "guid", "bool", "float", "double", "byte", "char", "string", "datetime", "timespan"];
+    var builtinTypes = ["int", "long", "short", "guid", "bool", "float", "double", "byte", "char", "string", "datetime", "timespan", "decimal"];
     function isBuiltinType(typeName) {
         var typeName = typeName.toLowerCase();
         return builtinTypes.indexOf(typeName) >= 0;
