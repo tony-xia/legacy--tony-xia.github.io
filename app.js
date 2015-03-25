@@ -50,6 +50,10 @@ function parseCode(pseudoCodeString) {
     var stage = StageLookupClassName;
     // Find the class name line which starts with "class"
     lines.forEach(function (line) {
+        var commentsIndex = line.indexOf('//');
+        if (commentsIndex > 0) {
+            line = line.substr(0, commentsIndex);
+        }
         line = line.trim();
         switch (stage) {
             case StageLookupClassName:
