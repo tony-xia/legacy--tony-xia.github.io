@@ -102,7 +102,7 @@
         }
 
         var eventName = campaign + "_" + $("#channelName").val() + "_" + content;
-        generatedUrl = "http://m.ioffice100.com&e=" + eventName;
+        generatedUrl = "http://m.ioffice100.com?e=" + eventName;
         $("#generatedUrlText").val(generatedUrl);
         generatedQRCodeUrl = "http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=" + encodeURIComponent(generatedUrl);
         // "http://qr.liantu.com/api.php?&bg=ffffff&fg=cc0000&text=x&logo=http://www.liantu.com/images/2013/sample.jpg"
