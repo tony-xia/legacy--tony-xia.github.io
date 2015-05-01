@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>市场活动工具</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body class="container">
+
+    <div class="jumbotron">
+        <h1>市场活动工具</h1>
+        <p></p>
+    </div>
+
+    <div class="row col-md-8">
+        <form class="form-horizontal">
+            <div class="form-group" id="campaignNameGroup">
+                <label for="campaignName" class="col-sm-2 control-label">市场活动名字</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="campaignName" placeholder="市场活动名字, 英文字母或者数字" data-toggle="tooltip" title="英文字母或者数字" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="channelName" class="col-sm-2 control-label">渠道</label>
+                <div class="col-sm-10">
+                    <select id="channelName" class="form-control">
+                        <option value="todayad">今日头条-广告</option>
+                        <option value="edm">EDM投递</option>
+                        <option value="h5">H5设计</option>
+                        <option value="appfirstlaunch">渠道首发资源</option>
+                        <option value="apparticle">渠道专题推荐</option>
+                        <option value="weibohot">微博热点</option>
+                        <option value="wechatarticle">微信推文</option>
+                        <option value="todayarticle">今日头条-发文</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="contentNameGroup">
+                <label for="contentName" class="col-sm-2 control-label">内容名字</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="contentName" placeholder="内容名字, 英文字母或者数字" data-toggle="tooltip" title="英文字母或者数字" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-primary" onclick="generate();">生成</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row col-md-8 hidden" id="generatedResult">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="generatedUrlText" class="col-sm-2 control-label">链接</label>
+                <div class="col-sm-8">
+                    <input id="generatedUrlText" type="text" class="form-control" />
+                </div>
+                <div class="col-sm-2">
+                    <button id="copyUrlButton" type="button" class="form-control btn btn-default" onclick="copyUrl();">复制链接</button>
+                    <label class="control-label" style=" display:none" id="copiedLabel">已复制</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="generatedUrlText" class="col-sm-2 control-label">二维码</label>
+                <div class="col-sm-8">
+                    <img id="generatedQRCodeImage" />
+                    <button type="button" class="form-control btn btn-default" style="width:auto;" onclick="downloadQRCode();">下载二维码</button>
+                </div>
+                <div class="col-sm-2">
+                </div>
+            </div>
+        </form>
+    </div>
+
+<script type="text/javascript">
+
+    var generatedUrl = "";
+    var generatedQRCodeUrl = "";
+
+    function generate() {
+        var campaign = $("#campaignName").val();
+        var content = $("#contentName").val();
+        if ((!campaign) || (!(/^[a-zA-Z0-9]*$/.test(campaign)))) {
+            $("#campaignNameGroup").addClass("has-error");
+            return false;
+        }
+        else {
+            $("#campaignNameGroup").removeClass("has-error");
+        }
+
+        if ((!content) || (!(/^[a-zA-Z0-9]*$/.test(content)))) {
+            $("#contentNameGroup").addClass("has-error");
+            return false;
+        }
+        else {
+            $("#contentNameGroup").removeClass("has-error");
+        }
+
+        var eventName = campaign + "_" + $("#channelName").val() + "_" + content;
+        generatedUrl = "http://m.ioffice100.com&e=" + eventName;
+        $("#generatedUrlText").val(generatedUrl);
+        generatedQRCodeUrl = "http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=" + encodeURIComponent(generatedUrl);
+        // "http://qr.liantu.com/api.php?&bg=ffffff&fg=cc0000&text=x&logo=http://www.liantu.com/images/2013/sample.jpg"
+        $("#generatedQRCodeImage").attr("src", generatedQRCodeUrl);
+
+        $("#generatedResult").removeClass("hidden");
+        return false;
+    }
+
+    function copyUrl() {
+        if (window.clipboardData) {
+            window.clipboardData.setData("Text", generatedUrl);
+            $("#copyUrlButton").fadeOut(0);
+            $("#copiedLabel").fadeIn(0);
+            $("#copiedLabel").fadeOut(600, function () { $("#copyUrlButton").fadeIn(0); });
+        }
+        return false;
+    }
+
+    function downloadQRCode() {
+        window.open(generatedQRCodeUrl, "_blank");
+        return false;
+    }
+
+</script>
+
+</body>
+</html>
+

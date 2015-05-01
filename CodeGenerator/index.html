@@ -26,19 +26,17 @@
                     </div>
                 </div>-->
                 <textarea class="form-control" id="CodeEditor" style="height: 600px;" rows="2" cols="20">
-enum GeneralTaskImportance;
-enum GeneralTaskStatus;
-class Task
+enum Importance;
+enum Status;
+class Person
 {
 Guid Id;
-long ReadableId;
-string Subject;
-GeneralTaskImportance Importance;
-GeneralTaskStatus Status;
-DateTime CreatedDate;
+string Name;
+Importance Importance;
+Status Status;
+DateTime Birthday;
 TimeSpan Timestamp;
-List&lt;TaskParticipant&gt; Participants;
-TaskCheckpoint CheckPoint;
+List&lt;Person&gt; Parents;
 }
 </textarea>
             </div>
