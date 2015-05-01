@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Code Generator</title>
+    <link rel="stylesheet" href="Content/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="app.css" type="text/css" />
+    <link rel="stylesheet" href="Scripts/Highlight/styles/vs.css" type="text/css" />
+    <script src="Scripts/jquery-2.1.3.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/Highlight/highlight.pack.js"></script>
+    <script src="Scripts/foundation/foundation.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+    <h1>&nbsp;&nbsp;Code Generator</h1>
+
+    <div style="margin:20px">
+        <div class="row">
+            <div class="col-lg-6">
+                <!--<div class="btn-toolbar" id="wysiwyg-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-sm" role="toolbar">
+                        <input type="tel" />
+                        <input type="text" />
+                    </div>
+                </div>-->
+                <textarea class="form-control" id="CodeEditor" style="height: 600px;" rows="2" cols="20">
+enum GeneralTaskImportance;
+enum GeneralTaskStatus;
+class Task
+{
+Guid Id;
+long ReadableId;
+string Subject;
+GeneralTaskImportance Importance;
+GeneralTaskStatus Status;
+DateTime CreatedDate;
+TimeSpan Timestamp;
+List&lt;TaskParticipant&gt; Participants;
+TaskCheckpoint CheckPoint;
+}
+</textarea>
+            </div>
+            <div class="col-lg-6">
+                <input type="button" class="btn btn-default" value="Copy" id="CopyButton" />
+                <label style="display:none" id="CopiedLabel">Copied</label>
+                <input type="hidden" value="" id="GeneratedCode" />
+                <pre><code id="preview" class="cs"></code></pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
