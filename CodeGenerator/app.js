@@ -1435,13 +1435,13 @@ var CodeTypeScript = (function () {
             else if (p.type.indexOf("List") > -1) {
                 sb.appendLine(indent2 + "if ((format." + camelNaming(p.name) + ") && (entity." + camelNaming(p.name) + ")) {");
                 sb.appendLine(indent3 + "writer.writeName(\"" + p.name + "\");");
-                sb.appendLine(indent3 + p.listItemType + ".serializeEntities(writer, entity." + camelNaming(p.name) + ", format." + camelNaming(p.name) + ");");
+                sb.appendLine(indent3 + p.typeWithoutList + ".serializeEntities(writer, entity." + camelNaming(p.name) + ", format." + camelNaming(p.name) + ");");
                 sb.appendLine(indent2 + "}");
             }
             else {
                 sb.appendLine(indent2 + "if ((format." + camelNaming(p.name) + ") && (entity." + camelNaming(p.name) + ")) {");
                 sb.appendLine(indent3 + "writer.writeName(\"" + p.name + "\");");
-                sb.appendLine(indent3 + p.name + ".serializeEntity(writer, entity." + camelNaming(p.name) + ", format." + camelNaming(p.name) + ");");
+                sb.appendLine(indent3 + p.typeWithoutList + ".serializeEntity(writer, entity." + camelNaming(p.name) + ", format." + camelNaming(p.name) + ");");
                 sb.appendLine(indent2 + "}");
             }
         });
