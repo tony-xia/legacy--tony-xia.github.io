@@ -203,6 +203,10 @@ function parseCode(pseudoCodeString) {
                                         codeInvoke.urlPath = parseUrlParts(urlPath);
                                         codeInvoke.urlQueryString = parseUrlParts(urlQueryString);
                                     }
+                                    else {
+                                        codeInvoke.urlPath = parseUrlParts(urlPairs[0]);
+                                        codeInvoke.urlQueryString = [];
+                                    }
                                     break;
                                 case "requestbody":
                                     stage = StageLookupInvokeRequestBodyProperties;
@@ -1666,7 +1670,7 @@ var CodeTypeScript = (function () {
                 }
             });
             sb.appendLine(indent2 + "writer.writeEndObject();");
-            sb.appendLine(indent2 + "this.requestBodyJson = writer.toString();");
+            sb.appendLine(indent2 + "this.requestBodyJson = writer.getRaw();");
         }
         sb.appendLine(indent1 + "}");
         sb.appendLine();
@@ -1728,14 +1732,14 @@ var CodeTypeScript = (function () {
         // deserializeEntity
         sb.appendLine();
         sb.appendLine(indent1 + "public static deserialize(jsonObject: any): " + resultClassName + " {");
-        sb.appendLine(indent2 + "let entity = new " + resultClassName + "();");
-        sb.appendLine(indent2 + "entity.deserializeBasicInfo(jsonObject);");
+        sb.appendLine(indent2 + "let result = new " + resultClassName + "();");
+        sb.appendLine(indent2 + "result.deserializeBasicInfo(jsonObject);");
         codeInvoke.responseBody.forEach(function (p) {
             if (CodeTypeScript.isBuiltinType(p.type)) {
                 switch (p.type.toLocaleLowerCase()) {
                     case "guid":
                         sb.appendLine(indent2 + "if((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                        sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = Guid.parse(jsonObject." + p.name + ");");
+                        sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = Guid.parse(jsonObject." + p.name + ");");
                         sb.appendLine(indent2 + "}");
                         break;
                     case "int":
@@ -1743,46 +1747,46 @@ var CodeTypeScript = (function () {
                     case "float":
                     case "double":
                         sb.appendLine(indent2 + "if ((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                        sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = jsonObject." + p.name + ";");
+                        sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = jsonObject." + p.name + ";");
                         sb.appendLine(indent2 + "}");
                         break;
                     case "string":
                         sb.appendLine(indent2 + "if ((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                        sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = jsonObject." + p.name + ";");
+                        sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = jsonObject." + p.name + ";");
                         sb.appendLine(indent2 + "}");
                         break;
                     case "boolean":
                     case "bool":
                         sb.appendLine(indent2 + "if ((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                        sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = jsonObject." + p.name + ";");
+                        sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = jsonObject." + p.name + ";");
                         sb.appendLine(indent2 + "}");
                         break;
                     case "date":
                     case "timespan":
                     case "datetime":
                         sb.appendLine(indent2 + "if ((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                        sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = new Date(Date.parse(jsonObject." + p.name + "));");
+                        sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = new Date(Date.parse(jsonObject." + p.name + "));");
                         sb.appendLine(indent2 + "}");
                         break;
                 }
             }
             else if (_this.isEnum(p.type)) {
                 sb.appendLine(indent2 + "if ((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = <" + p.type + ">(jsonObject." + p.name + ");");
+                sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = <" + p.type + ">(jsonObject." + p.name + ");");
                 sb.appendLine(indent2 + "}");
             }
             else if (p.type.indexOf("List") > -1) {
                 sb.appendLine(indent2 + "if ((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = " + p.typeWithoutList + ".deserializeEntities(jsonObject." + p.name + ");");
+                sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = " + p.typeWithoutList + ".deserializeEntities(jsonObject." + p.name + ");");
                 sb.appendLine(indent2 + "}");
             }
             else {
                 sb.appendLine(indent2 + "if ((jsonObject." + p.name + " !== undefined) && (jsonObject." + p.name + " !== null)) {");
-                sb.appendLine(indent3 + "entity." + camelNaming(p.name) + " = " + p.typeWithoutList + ".deserializeEntity(jsonObject." + p.name + ");");
+                sb.appendLine(indent3 + "result." + camelNaming(p.name) + " = " + p.typeWithoutList + ".deserializeEntity(jsonObject." + p.name + ");");
                 sb.appendLine(indent2 + "}");
             }
         });
-        sb.appendLine(indent2 + "return entity;");
+        sb.appendLine(indent2 + "return result;");
         sb.appendLine(indent1 + "}");
         sb.appendLine("}");
     };
@@ -1831,7 +1835,7 @@ var CodeTypeScript = (function () {
                 case "date":
                 case "timespan":
                 case "datetime":
-                    return name + ".toString(\"YYYY-MM-DD HH:mm:ss\")";
+                    return name + ".toStringWithFormat(\"YYYY-MM-DD HH:mm:ss\")";
                 default:
                     return name;
             }
