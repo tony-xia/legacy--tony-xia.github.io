@@ -1621,7 +1621,9 @@ var CodeTypeScript = (function () {
             sb.append(_this.buildToString(p.type, p.name));
             sb.append("}");
         });
-        sb.append("?");
+        if (invokeItem.urlQueryString.length > 0) {
+            sb.append("?");
+        }
         invokeItem.urlQueryString.forEach(function (part) {
             if (part instanceof CodeUrlPlain) {
                 sb.append(part.plainUrl);
